@@ -1,6 +1,5 @@
 import streamlit as st
 import pandas as pd
-from sklearn.preprocessing import StandardScaler
 from src.pipeline.predict_pipeline import CustomData, PredictPipeline
 
 # Streamlit app
@@ -20,13 +19,19 @@ writing_score = st.number_input("Enter your Writing Score (out of 100)", min_val
 
 # Predict button
 if st.button("Predict your Math Score"):
-    # Create an instance of CustomData with the form inputs
+    # Standardize the input to match the format expected by the model (convert to lowercase)
+    standardized_gender = gender.lower()
+    standardized_ethnicity = ethnicity.lower()
+    standardized_lunch = lunch.lower()
+    standardized_test_preparation_course = test_preparation_course.lower()
+
+    # Create an instance of CustomData with the standardized inputs
     data = CustomData(
-        gender=gender,
-        race_ethnicity=ethnicity,
+        gender=standardized_gender,
+        race_ethnicity=standardized_ethnicity,
         parental_level_of_education=parental_level_of_education,
-        lunch=lunch,
-        test_preparation_course=test_preparation_course,
+        lunch=standardized_lunch,
+        test_preparation_course=standardized_test_preparation_course,
         reading_score=float(reading_score),
         writing_score=float(writing_score)
     )
@@ -36,7 +41,10 @@ if st.button("Predict your Math Score"):
 
     # Initialize the prediction pipeline and make predictions
     predict_pipeline = PredictPipeline()
-    results = predict_pipeline.predict(pred_df)
+    try:
+        results = predict_pipeline.predict(pred_df)
 
-    # Display the prediction result
-    st.success(f"Predicted Math Score: {results[0]}")
+        # Display the prediction result
+        st.success(f"Predicted Math Score: {results[0]}")
+    except Exception as e:
+        st.error(f"Error occurred during prediction: {str(e)}")
