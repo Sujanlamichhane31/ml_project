@@ -19,13 +19,19 @@ writing_score = st.number_input("Enter your Writing Score (out of 100)", min_val
 
 # Predict button
 if st.button("Predict your Math Score"):
-    # Standardize the input to match the format expected by the model (convert to lowercase)
+    # Map inputs to the exact categories used during model training
     standardized_gender = gender.lower()
-    standardized_ethnicity = ethnicity.lower()
+    standardized_ethnicity = {
+        "Group A": "group A",
+        "Group B": "group B",
+        "Group C": "group C",
+        "Group D": "group D",
+        "Group E": "group E"
+    }[ethnicity]  # Map to lower case to match the training data
     standardized_lunch = lunch.lower()
     standardized_test_preparation_course = test_preparation_course.lower()
 
-    # Create an instance of CustomData with the standardized inputs
+    # Create an instance of CustomData with the mapped inputs
     data = CustomData(
         gender=standardized_gender,
         race_ethnicity=standardized_ethnicity,
