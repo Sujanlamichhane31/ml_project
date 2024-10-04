@@ -27,7 +27,18 @@ if st.button("Predict your Math Score"):
         "Group C": "group C",
         "Group D": "group D",
         "Group E": "group E"
-    }[ethnicity]  # Map to lower case to match the training data
+    }[ethnicity]  # Map to match the training data
+    
+    # Mapping parental level of education
+    standardized_parental_level_of_education = {
+        "Associate's degree": "associate's degree",
+        "Bachelor's degree": "bachelor's degree",
+        "High school": "high school",
+        "Master's degree": "master's degree",
+        "Some college": "some college",
+        "Some high school": "some high school"
+    }[parental_level_of_education]
+    
     standardized_lunch = lunch.lower()
     standardized_test_preparation_course = test_preparation_course.lower()
 
@@ -35,7 +46,7 @@ if st.button("Predict your Math Score"):
     data = CustomData(
         gender=standardized_gender,
         race_ethnicity=standardized_ethnicity,
-        parental_level_of_education=parental_level_of_education,
+        parental_level_of_education=standardized_parental_level_of_education,
         lunch=standardized_lunch,
         test_preparation_course=standardized_test_preparation_course,
         reading_score=float(reading_score),
